@@ -13,6 +13,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -33,5 +36,98 @@ public final class Constants {
 
     /** Replaying from a log file. */
     REPLAY
+  }
+
+  public static class RobotMap {
+    public static class Drive {
+      public static final int frontLeftDrive = 1;
+      public static final int frontLeftTurn = 2;
+      public static final int frontRightDrive = 3;
+      public static final int frontRightTurn = 4;
+      public static final int backLeftDrive = 5;
+      public static final int backLeftTurn = 6;
+      public static final int backRightDrive = 7;
+      public static final int backRightTurn = 8;
+
+      public static final boolean frontLeftTurnInvert = false;
+      public static final boolean frontRightTurnInvert = false;
+      public static final boolean backLeftTurnInvert = false;
+      public static final boolean backRightTurnInvert = false;
+
+      public static final int frontLeftEncoder = 0;
+      public static final int frontRightEncoder = 1;
+      public static final int backLeftEncoder = 2;
+      public static final int backRightEncoder = 3;
+
+      public static final double frontLeftOffset =
+          Rotation2d.fromDegrees(0).getRadians(); // 101.8585654710
+      public static final double frontRightOffset =
+          Rotation2d.fromDegrees(0).getRadians(); // 39.585409
+      public static final double backLeftOffset =
+          Rotation2d.fromDegrees(0).getRadians(); // 103.4415122
+      public static final double backRightOffset =
+          Rotation2d.fromDegrees(0).getRadians(); // 110.898736
+
+      public static final int gyro = 10;
+    }
+  }
+
+  public static class DriveConstants {
+    public static final boolean wheelsStraight = false;
+
+    public static final double trackWidthX = Units.inchesToMeters(19.75);
+    public static final double trackWidthY = Units.inchesToMeters(20.75);
+    public static final double trackBaseRadius = Math.hypot(trackWidthX / 2.0, trackWidthY / 2.0);
+
+    public static final double wheelRadius = Units.inchesToMeters(2);
+
+    public static final double driveRatio = 5.36;
+    public static final double driveMOI = 0.025;
+    public static final double turnRatio = 150 / 7;
+    public static final double turnMOI = 0.004;
+
+    public static final double driveConversion = (driveRatio) * (1.0 / (wheelRadius * 2 * Math.PI));
+    public static final double turnConversion = 2 * Math.PI / turnRatio;
+    public static final double turnVelocityConversion = turnConversion / 60;
+
+    public static final int driveCurrent = 40; // 70
+    public static final int turnCurrent = 40; // 30
+
+    public static final double odometeryFrequency = 250;
+    public static final double updateFrequency = 100;
+
+    public static final double maxLinearVelocity = Units.feetToMeters(20.4);
+    // public static final double maxLinearVelocity = Units.feetToMeters(1.4);
+    public static final double maxLinearAccel = 8.0;
+
+    public static final double maxAngularVelocity = 20;
+    public static final double maxAngularAccel = 10;
+
+    public static double kPDriveReal = 2.0;
+    public static double kDDriveReal = 0.2;
+    public static double kSDriveReal = 0.04;
+    public static double kVDriveReal = 1.93;
+    public static double kADriveReal = 0.25;
+
+    public static double kPTurnReal = 2.5; // 1.5?
+    public static double kDTurnReal = 0.0;
+
+    public static double kPDriveSim = 0.3;
+    public static double kDDriveSim = 0.0;
+    public static double kSDriveSim = 0.0;
+    public static double kVDriveSim = 2.0;
+    public static double kADriveSim = 0.0;
+
+    public static double kPTurnSim = 100.0;
+    public static double kDTurnSim = 0.0;
+
+    public static double kPDriveReplay = 0.0;
+    public static double kDDriveReplay = 0.0;
+    public static double kSDriveReplay = 0.0;
+    public static double kVDriveReplay = 0.0;
+    public static double kADriveReplay = 0.0;
+
+    public static double kPTurnReplay = 0.0;
+    public static double kDTurnReplay = 0.0;
   }
 }
