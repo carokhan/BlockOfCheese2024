@@ -60,13 +60,13 @@ public final class Constants {
       public static final int backRightEncoder = 3;
 
       public static final double frontLeftOffset =
-          Rotation2d.fromDegrees(0).getRadians(); // 101.8585654710
+          Rotation2d.fromDegrees(100.15).getRadians(); // 101.8585654710
       public static final double frontRightOffset =
-          Rotation2d.fromDegrees(0).getRadians(); // 39.585409
+          Rotation2d.fromDegrees(39.11).getRadians(); // 39.585409
       public static final double backLeftOffset =
-          Rotation2d.fromDegrees(0).getRadians(); // 103.4415122
+          Rotation2d.fromDegrees(100.15).getRadians(); // 103.4415122
       public static final double backRightOffset =
-          Rotation2d.fromDegrees(0).getRadians(); // 110.898736
+          Rotation2d.fromDegrees(110.45).getRadians(); // 110.898736
 
       public static final int gyro = 10;
     }
