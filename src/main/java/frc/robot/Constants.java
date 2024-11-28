@@ -49,10 +49,10 @@ public final class Constants {
       public static final int backRightDrive = 7;
       public static final int backRightTurn = 8;
 
-      public static final boolean frontLeftTurnInvert = false;
-      public static final boolean frontRightTurnInvert = false;
-      public static final boolean backLeftTurnInvert = false;
-      public static final boolean backRightTurnInvert = false;
+      public static final boolean frontLeftTurnInvert = true;
+      public static final boolean frontRightTurnInvert = true;
+      public static final boolean backLeftTurnInvert = true;
+      public static final boolean backRightTurnInvert = true;
 
       public static final int frontLeftEncoder = 0;
       public static final int frontRightEncoder = 1;
@@ -60,13 +60,13 @@ public final class Constants {
       public static final int backRightEncoder = 3;
 
       public static final double frontLeftOffset =
-          Rotation2d.fromDegrees(100.15).getRadians(); // 101.8585654710
+          Rotation2d.fromDegrees(-78.560751073938).getRadians(); // 101.8585654710
       public static final double frontRightOffset =
-          Rotation2d.fromDegrees(39.11).getRadians(); // 39.585409
+          Rotation2d.fromDegrees(-175.70581168291014).getRadians(); // 39.585409
       public static final double backLeftOffset =
-          Rotation2d.fromDegrees(100.15).getRadians(); // 103.4415122
+          Rotation2d.fromDegrees(-73.54207322946).getRadians(); // 103.4415122
       public static final double backRightOffset =
-          Rotation2d.fromDegrees(110.45).getRadians(); // 110.898736
+          Rotation2d.fromDegrees(-72.38969990).getRadians(); // 110.898736
 
       public static final int gyro = 10;
     }

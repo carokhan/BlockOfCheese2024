@@ -27,6 +27,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import java.util.OptionalDouble;
 import java.util.Queue;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
@@ -154,6 +155,9 @@ public class ModuleIOSparkMax implements ModuleIO {
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
+    Logger.recordOutput(
+        "Module" + turnAbsoluteEncoder.getChannel() + "/AbsoluteEncoderVoltage",
+        turnAbsoluteEncoder.getVoltage());
     inputs.drivePositionRad =
         Units.rotationsToRadians(driveEncoder.getPosition()) / DriveConstants.driveRatio;
     inputs.driveVelocityRadPerSec =
