@@ -27,7 +27,6 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.RobotMap;
 import java.util.OptionalDouble;
 import java.util.Queue;
-import org.littletonrobotics.junction.Logger;
 
 /**
  * Module IO implementation for SparkMax drive motor controller, SparkMax turn motor controller (NEO
@@ -148,7 +147,6 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     driveSparkMax.burnFlash();
     turnSparkMax.burnFlash();
-
   }
 
   @Override
