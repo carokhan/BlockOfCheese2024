@@ -15,6 +15,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -25,7 +26,8 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final Mode currentMode = Mode.REAL;
+  public static final Mode currentMode =
+      RobotBase.isSimulation() ? Mode.SIM : (RobotBase.isReal() ? Mode.REAL : Mode.REPLAY);
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -112,13 +114,13 @@ public final class Constants {
     public static double kPTurnReal = 2.5; // 1.5?
     public static double kDTurnReal = 0.0;
 
-    public static double kPDriveSim = 0.3;
-    public static double kDDriveSim = 0.0;
-    public static double kSDriveSim = 0.0;
-    public static double kVDriveSim = 2.0;
-    public static double kADriveSim = 0.0;
+    public static double kPDriveSim = 2.0;
+    public static double kDDriveSim = 0.2;
+    public static double kSDriveSim = 0.4;
+    public static double kVDriveSim = 1.93;
+    public static double kADriveSim = 0.25;
 
-    public static double kPTurnSim = 100.0;
+    public static double kPTurnSim = 2.5;
     public static double kDTurnSim = 0.0;
 
     public static double kPDriveReplay = 0.0;
@@ -129,5 +131,13 @@ public final class Constants {
 
     public static double kPTurnReplay = 0.0;
     public static double kDTurnReplay = 0.0;
+  }
+
+  public static class ControlConstants {
+    public static final double deadband = 0.01;
+  }
+
+  public static class SimConstants {
+    public static final double loopTime = 0.02;
   }
 }

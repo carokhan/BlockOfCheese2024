@@ -149,15 +149,10 @@ public class ModuleIOSparkMax implements ModuleIO {
     driveSparkMax.burnFlash();
     turnSparkMax.burnFlash();
 
-    // turnRelativeEncoder.setPosition(
-    //     turnAbsoluteEncoder.getVoltage() / RobotController.getVoltage5V() * 2.0 * Math.PI);
   }
 
   @Override
   public void updateInputs(ModuleIOInputs inputs) {
-    Logger.recordOutput(
-        "Module" + turnAbsoluteEncoder.getChannel() + "/AbsoluteEncoderVoltage",
-        turnAbsoluteEncoder.getVoltage());
     inputs.drivePositionRad =
         Units.rotationsToRadians(driveEncoder.getPosition()) / DriveConstants.driveRatio;
     inputs.driveVelocityRadPerSec =
