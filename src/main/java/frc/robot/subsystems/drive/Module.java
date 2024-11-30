@@ -133,13 +133,32 @@ public class Module {
   }
 
   /** Runs the module with the specified voltage while controlling to zero degrees. */
-  public void runCharacterization(double volts) {
+  public void runDriveCharacterization(double volts) {
     // Closed loop turn control
     angleSetpoint = new Rotation2d();
 
     // Open loop drive control
     io.setDriveVoltage(volts);
     speedSetpoint = null;
+  }
+
+  public void runTurnCharacterization(double output) {
+    io.setDriveVoltage(0.0);
+    io.setTurnVoltage(output);
+  }
+
+  /** Characterize robot angular motion. */
+  public void runAngularCharacterization(double output) {
+    io.setDriveVoltage(output);
+    angleSetpoint =
+        Rotation2d.fromDegrees(
+            switch (index) {
+              case 0 -> 135.0;
+              case 1 -> 45.0;
+              case 2 -> -135.0;
+              case 3 -> -45.0;
+              default -> 0.0;
+            });
   }
 
   /** Disables all outputs to motors. */

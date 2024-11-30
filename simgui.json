@@ -1,7 +1,15 @@
 {
   "NTProvider": {
     "types": {
+      "//AutoChooser": "String Chooser",
       "/FMSInfo": "FMSInfo"
+    },
+    "windows": {
+      "//AutoChooser": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {

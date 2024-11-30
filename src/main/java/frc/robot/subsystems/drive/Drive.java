@@ -15,7 +15,9 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,6 +33,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.Constants.DriveConstants;
 import java.util.concurrent.locks.Lock;
@@ -58,6 +61,13 @@ public class Drive extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
+  PIDController autoXController =
+      new PIDController(AutoConstants.kPTranslation, 0.0, AutoConstants.kDTranslation);
+  PIDController autoYController =
+      new PIDController(AutoConstants.kPTranslation, 0.0, AutoConstants.kDTranslation);
+  PIDController autoThetaController =
+      new PIDController(AutoConstants.kPRotation, 0.0, AutoConstants.kDRotation);
+
   public Drive(
       GyroIO gyroIO,
       ModuleIO flModuleIO,
@@ -74,31 +84,6 @@ public class Drive extends SubsystemBase {
     PhoenixOdometryThread.getInstance().start();
     SparkMaxOdometryThread.getInstance().start();
 
-    // Configure AutoBuilder for PathPlanner
-    // AutoBuilder.configureHolonomic(
-    //     this::getPose,
-    //     this::setPose,
-    //     () -> kinematics.toChassisSpeeds(getModuleStates()),
-    //     this::runVelocity,
-    //     new HolonomicPathFollowerConfig(
-    //         DriveConstants.maxLinearVelocity,
-    //         DriveConstants.trackBaseRadius,
-    //         new ReplanningConfig()),
-    //     () ->
-    //         DriverStation.getAlliance().isPresent()
-    //             && DriverStation.getAlliance().get() == Alliance.Red,
-    //     this);
-    // Pathfinding.setPathfinder(new LocalADStarAK());
-    // PathPlannerLogging.setLogActivePathCallback(
-    //     (activePath) -> {
-    //       Logger.recordOutput(
-    //           "Odometry/Trajectory", activePath.toArray(new Pose2d[activePath.size()]));
-    //     });
-    // PathPlannerLogging.setLogTargetPoseCallback(
-    //     (targetPose) -> {
-    //       Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
-    //     });
-
     // Configure SysId
     sysId =
         new SysIdRoutine(
@@ -110,7 +95,7 @@ public class Drive extends SubsystemBase {
             new SysIdRoutine.Mechanism(
                 (voltage) -> {
                   for (int i = 0; i < 4; i++) {
-                    modules[i].runCharacterization(voltage.in(Volts));
+                    modules[i].runAngularCharacterization(voltage.in(Volts));
                   }
                 },
                 null,
@@ -326,4 +311,31 @@ public class Drive extends SubsystemBase {
       new Translation2d(-DriveConstants.trackWidthX / 2.0, -DriveConstants.trackWidthY / 2.0)
     };
   }
+
+  public void choreoController(Pose2d currentPose, SwerveSample sample) {
+    autoThetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    Logger.recordOutput("Drive/Auto/DesiredPose", sample.getPose());
+    Logger.recordOutput("Drive/Auto/DesiredXVelocity", sample.vx);
+    Logger.recordOutput("Drive/Auto/DesiredYVelocity", sample.vx);
+
+    double xFF = sample.vx;
+    double yFF = sample.vy;
+    double rotationFF = sample.omega;
+
+    double xFeedback = autoXController.calculate(currentPose.getX(), sample.x);
+    double yFeedback = autoYController.calculate(currentPose.getY(), sample.y);
+    double rotationFeedback =
+        autoThetaController.calculate(currentPose.getRotation().getRadians(), sample.heading);
+
+    ChassisSpeeds out =
+        ChassisSpeeds.fromFieldRelativeSpeeds(
+            xFF + xFeedback,
+            yFF + yFeedback,
+            rotationFF + rotationFeedback,
+            currentPose.getRotation());
+
+    runVelocity(out);
+  }
+
 }

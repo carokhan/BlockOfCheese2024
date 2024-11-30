@@ -74,6 +74,30 @@ public final class Constants {
     }
   }
 
+  public static class AutoConstants {
+    public static final double kPTranslation = 8.5;
+    public static final double kDTranslation = 0.0;
+
+    public static final double kPRotation = 3.0;
+    public static final double kDRotation = 0.0;
+
+    public static final double mass = DriveConstants.mass;
+    public static final double moi = DriveConstants.angularMOI;
+    public static final double bumperFront = Units.inchesToMeters(33.5 / 2);
+    public static final double bumperBack = Units.inchesToMeters(33.5 / 2);
+    public static final double bumperSide = Units.inchesToMeters(32.5 / 2);
+    public static final double frontModX = DriveConstants.trackWidthY / 2;
+    public static final double frontLeftY = DriveConstants.trackWidthX / 2;
+    public static final double backModX = -DriveConstants.trackWidthY / 2;
+    public static final double backLeftY = -DriveConstants.trackWidthX / 2;
+    public static final double wheelRadius = DriveConstants.wheelRadius;
+    public static final double motorRevWheelRev = DriveConstants.driveRatio;
+    public static final double motorMaxSpeed =
+        5880 * 0.8 * Math.PI * 2 / 60; // RPM (free speed) * 0.8 * 2pi/60 = radPerSec (loaded speed)
+    public static final double motorMaxTorque =
+        3.28 / 181 * DriveConstants.driveCurrent; // (kT * currentLimit)
+  }
+
   public static class DriveConstants {
     public static final boolean wheelsStraight = false;
 
@@ -83,9 +107,11 @@ public final class Constants {
 
     public static final double wheelRadius = Units.inchesToMeters(2);
 
+    public static final double mass = Units.lbsToKilograms(56);
+
     public static final double driveRatio = 5.36;
     public static final double driveMOI = 0.025;
-    public static final double turnRatio = 150 / 7;
+    public static final double turnRatio = 150.0 / 7.0;
     public static final double turnMOI = 0.004;
 
     public static final double driveConversion = (driveRatio) * (1.0 / (wheelRadius * 2 * Math.PI));
@@ -105,13 +131,13 @@ public final class Constants {
     public static final double maxAngularVelocity = 20;
     public static final double maxAngularAccel = 10;
 
-    public static double kPDriveReal = 2.0;
+    public static double kPDriveReal = 2.0; // 1.4866E-05
     public static double kDDriveReal = 0.2;
-    public static double kSDriveReal = 0.04;
-    public static double kVDriveReal = 1.93;
-    public static double kADriveReal = 0.25;
+    public static double kSDriveReal = 0.17236; // 0.097715, 0.027736, 0.021057, 0.093808
+    public static double kVDriveReal = (0.10324 + 0.11273 + 0.10143 + 0.10776) / 4;
+    public static double kADriveReal = (0.0056151 + 0.0040328 + 0.0077964 + 0.0060387) / 4;
 
-    public static double kPTurnReal = 2.5; // 1.5?
+    public static double kPTurnReal = 1.5; // 1.5?
     public static double kDTurnReal = 0.0;
 
     public static double kPDriveSim = 2.0;
@@ -131,6 +157,10 @@ public final class Constants {
 
     public static double kPTurnReplay = 0.0;
     public static double kDTurnReplay = 0.0;
+
+    public static final double kALinear = (0.10222 + 0.19369 + 0.18158 + 0.11887) / 4;
+    public static final double kAAngular = (0.23623 + 0.23717 + 0.23954 + 0.22678) / 4;
+    public static final double angularMOI = mass * trackWidthY / 2 * kAAngular / kALinear; // 20.8
   }
 
   public static class ControlConstants {
