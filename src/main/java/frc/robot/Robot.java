@@ -13,14 +13,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.VisionConstants;
 import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -82,6 +87,8 @@ public class Robot extends LoggedRobot {
     // Logger.disableDeterministicTimestamps()
 
     // Start AdvantageKit logger
+    LogTable.disableProtobufWarning();
+    Logger.registerURCL(URCL.startExternal());
     Logger.start();
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
@@ -97,6 +104,27 @@ public class Robot extends LoggedRobot {
     // finished or interrupted commands, and running subsystem periodic() methods.
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
+    if (VisionConstants.useVision) {
+
+      for (var camera : robotContainer.apriltagVision) {
+        if (RobotBase.isSimulation()) {
+          camera.updateSimPose(robotContainer.drive.getPose());
+        }
+        camera.updateInputs();
+        robotContainer.drive.addVisionMeasurement(
+            camera.getEstimatedPose(), camera.getLatestTimestamp(), camera.getLatestStdDevs());
+      }
+    }
+
+    Logger.recordOutput(
+        "LeftCameraPos",
+        new Pose3d(robotContainer.drive.getPose())
+            .transformBy(VisionConstants.leftCamera.robotToCamera));
+    Logger.recordOutput(
+        "RightCameraPos",
+        new Pose3d(robotContainer.drive.getPose())
+            .transformBy(VisionConstants.rightCamera.robotToCamera));
+
     CommandScheduler.getInstance().run();
     robotContainer.autoChooser.update();
   }

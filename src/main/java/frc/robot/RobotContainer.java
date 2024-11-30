@@ -27,6 +27,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.subsystems.apriltagvision.ApriltagCamera;
+import frc.robot.subsystems.apriltagvision.ApriltagCameraIO;
+import frc.robot.subsystems.apriltagvision.ApriltagCameraIOReal;
+import frc.robot.subsystems.apriltagvision.ApriltagCameraIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -42,7 +47,8 @@ import frc.robot.subsystems.drive.ModuleIOSparkMax;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  public final Drive drive;
+  public final ApriltagCamera[] apriltagVision;
 
   public AutoChooser autoChooser;
   private AutoFactory autoFactory;
@@ -65,6 +71,15 @@ public class RobotContainer {
                 new ModuleIOSparkMax(1),
                 new ModuleIOSparkMax(2),
                 new ModuleIOSparkMax(3));
+        apriltagVision =
+            new ApriltagCamera[] {
+              new ApriltagCamera(
+                  new ApriltagCameraIOReal(VisionConstants.leftCamera), VisionConstants.leftCamera),
+              new ApriltagCamera(
+                  new ApriltagCameraIOReal(VisionConstants.rightCamera),
+                  VisionConstants.rightCamera)
+            };
+
         break;
 
       case SIM:
@@ -76,6 +91,13 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        apriltagVision =
+            new ApriltagCamera[] {
+              new ApriltagCamera(
+                  new ApriltagCameraIOSim(VisionConstants.leftCamera), VisionConstants.leftCamera),
+              new ApriltagCamera(
+                  new ApriltagCameraIOSim(VisionConstants.rightCamera), VisionConstants.rightCamera)
+            };
         break;
 
       default:
@@ -87,6 +109,11 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        apriltagVision =
+            new ApriltagCamera[] {
+              new ApriltagCamera(new ApriltagCameraIO() {}, VisionConstants.leftCamera),
+              new ApriltagCamera(new ApriltagCameraIO() {}, VisionConstants.rightCamera)
+            };
         break;
     }
 

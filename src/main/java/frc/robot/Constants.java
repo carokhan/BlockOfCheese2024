@@ -13,7 +13,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -93,7 +102,8 @@ public final class Constants {
     public static final double wheelRadius = DriveConstants.wheelRadius;
     public static final double motorRevWheelRev = DriveConstants.driveRatio;
     public static final double motorMaxSpeed =
-        5880 * 0.8 * Math.PI * 2 / 60; // RPM (free speed) * 0.8 * 2pi/60 = radPerSec (loaded speed)
+        5880 * 0.8 * Math.PI * 2 / 60; // RPM (free speed) * 0.8 * 2pi/60 =
+    // radPerSec (loaded speed)
     public static final double motorMaxTorque =
         3.28 / 181 * DriveConstants.driveCurrent; // (kT * currentLimit)
   }
@@ -164,10 +174,70 @@ public final class Constants {
   }
 
   public static class ControlConstants {
-    public static final double deadband = 0.01;
+    public static final double deadband = 0.09375;
   }
 
   public static class SimConstants {
     public static final double loopTime = 0.02;
+  }
+
+  public static class VisionConstants {
+    public static final boolean useVision = true;
+
+    public static class CameraInfo {
+
+      public String cameraName;
+      public String model;
+      public Transform3d robotToCamera;
+      public Rotation2d diagFOV;
+      public int[] cameraRes;
+
+      public CameraInfo(
+          String cameraName,
+          String model,
+          Transform3d robotToCamera,
+          Rotation2d diagFOV,
+          int[] cameraRes) {
+        this.cameraName = cameraName;
+        this.model = model;
+        this.robotToCamera = robotToCamera;
+        this.diagFOV = diagFOV;
+        this.cameraRes = cameraRes;
+      }
+    }
+
+    public static CameraInfo leftCamera =
+        new CameraInfo(
+            "LeftCamera",
+            "Arducam OV2311-1086-A",
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(7.875),
+                    Units.inchesToMeters(10.25),
+                    Units.inchesToMeters(8.25)),
+                new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                    .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(30.0)))),
+            Rotation2d.fromDegrees(75),
+            new int[] {1600, 1200});
+
+    public static CameraInfo rightCamera =
+        new CameraInfo(
+            "RightCamera",
+            "Spinel OV9281-1086-B",
+            new Transform3d(
+                new Translation3d(
+                    Units.inchesToMeters(7.875),
+                    Units.inchesToMeters(-10.25),
+                    Units.inchesToMeters(8.25)),
+                new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
+                    .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(-30.0)))),
+            Rotation2d.fromDegrees(95),
+            new int[] {1280, 720});
+
+    public static final Matrix<N3, N1> singleTagStdDev =
+        VecBuilder.fill(0.8, 0.8, Double.MAX_VALUE);
+    public static final Matrix<N3, N1> multiTagStdDev = VecBuilder.fill(0.5, 0.5, Double.MAX_VALUE);
+    public static final AprilTagFieldLayout aprilTagFieldLayout =
+        AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   }
 }
