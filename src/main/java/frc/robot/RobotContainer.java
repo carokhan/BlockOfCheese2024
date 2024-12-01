@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.apriltagvision.ApriltagCamera;
 import frc.robot.subsystems.apriltagvision.ApriltagCameraIO;
-import frc.robot.subsystems.apriltagvision.ApriltagCameraIOReal;
 import frc.robot.subsystems.apriltagvision.ApriltagCameraIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -71,13 +70,19 @@ public class RobotContainer {
                 new ModuleIOSparkMax(1),
                 new ModuleIOSparkMax(2),
                 new ModuleIOSparkMax(3));
+        // apriltagVision =
+        //     new ApriltagCamera[] {
+        //       new ApriltagCamera(
+        //           new ApriltagCameraIOReal(VisionConstants.leftCamera),
+        // VisionConstants.leftCamera),
+        //       new ApriltagCamera(
+        //           new ApriltagCameraIOReal(VisionConstants.rightCamera),
+        //           VisionConstants.rightCamera)
+        //     };
         apriltagVision =
             new ApriltagCamera[] {
-              new ApriltagCamera(
-                  new ApriltagCameraIOReal(VisionConstants.leftCamera), VisionConstants.leftCamera),
-              new ApriltagCamera(
-                  new ApriltagCameraIOReal(VisionConstants.rightCamera),
-                  VisionConstants.rightCamera)
+              new ApriltagCamera(new ApriltagCameraIO() {}, VisionConstants.leftCamera),
+              new ApriltagCamera(new ApriltagCameraIO() {}, VisionConstants.rightCamera)
             };
 
         break;

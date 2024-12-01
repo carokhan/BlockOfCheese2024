@@ -209,7 +209,7 @@ public final class Constants {
     public static CameraInfo leftCamera =
         new CameraInfo(
             "LeftCamera",
-            "Arducam OV2311-1086-A",
+            "Spinel OV9281-1086-B",
             new Transform3d(
                 new Translation3d(
                     Units.inchesToMeters(7.875),
@@ -217,13 +217,13 @@ public final class Constants {
                     Units.inchesToMeters(8.25)),
                 new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
                     .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(30.0)))),
-            Rotation2d.fromDegrees(75),
-            new int[] {1600, 1200});
+            Rotation2d.fromDegrees(95),
+            new int[] {1280, 720});
 
     public static CameraInfo rightCamera =
         new CameraInfo(
             "RightCamera",
-            "Spinel OV9281-1086-B",
+            "Arducam OV2311-1086-A",
             new Transform3d(
                 new Translation3d(
                     Units.inchesToMeters(7.875),
@@ -231,8 +231,8 @@ public final class Constants {
                     Units.inchesToMeters(8.25)),
                 new Rotation3d(0.0, Units.degreesToRadians(-28.125), 0.0)
                     .rotateBy(new Rotation3d(0.0, 0.0, Units.degreesToRadians(-30.0)))),
-            Rotation2d.fromDegrees(95),
-            new int[] {1280, 720});
+            Rotation2d.fromDegrees(75),
+            new int[] {1600, 1200});
 
     public static final Matrix<N3, N1> singleTagStdDev =
         VecBuilder.fill(0.8, 0.8, Double.MAX_VALUE);
